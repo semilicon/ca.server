@@ -1,0 +1,4 @@
+node_modules
+log/_syslog.log
+package-lock.json
+config.json

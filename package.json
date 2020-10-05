@@ -1,0 +1,26 @@
+{
+  "name": "lk.neurop",
+  "version": "0.1.0",
+  "description": "lk.neurop",
+  "private": true,
+  "main": "vrz.ui.js",
+  "dependencies": {
+    "bs58": "^4.0.1",
+    "cookie": "^0.4.0",
+    "ip": "1.1.5",
+    "mime-types": "^2.1.24",
+    "mustache": "^3.0.1",
+    "nodemailer": "^6.4.11",
+    "pg": "^7.11.0",
+    "qs": "^6.7.0",
+    "redis": "^2.8.0",
+    "request": "^2.88.0",
+    "striptags": "^3.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "SEMILICON LLC",
+  "license": "ISC"
+}

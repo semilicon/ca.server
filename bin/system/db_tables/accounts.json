@@ -1,0 +1,10 @@
+{
+    "name":"accounts",
+    "cols":[
+        {"name":"id","type":"INTEGER","notNull":true,"primaryKey":true},
+        {"name":"publicKey","type":"TEXT","notNull":false,"default":""},
+        {"name":"secretKey","type":"TEXT","notNull":false,"default":""},
+        {"name":"nonce","type":"INTEGER","notNull":false,"default":0}
+    ],
+    "defaultValues":[]
+}

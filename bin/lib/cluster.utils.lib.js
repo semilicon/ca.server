@@ -14,6 +14,9 @@ var lib={
 			let newfork=cluster.fork({role:brokenFork.role});
 			lib.forks[newfork.id]=newfork;
 			lib.forks[newfork.id].role=brokenFork.role;
+			lib.forks[newfork.id].on('message', function(msg){
+				if (msg.cmd && msg.cmd === 'restart') lib.killForks()
+			});
 			delete lib.forks[brokenFork.id];
 		});
 	},
@@ -70,8 +73,11 @@ var lib={
 				let name =pathParser.basename(handlers[i],'.js');
 				if(fs.existsSync(__path+'handlers/'+name+'.js')){
 					let fork=cluster.fork({role:name+'.handler'});
-					forks[fork.id]=fork;
-					forks[fork.id].role=name+'.handler';
+					lib.forks[fork.id]=fork;
+					lib.forks[fork.id].role=name+'.handler';
+					lib.forks[fork.id].on('message', function(msg){
+						if (msg.cmd && msg.cmd === 'restart') lib.killForks()
+					});
 				}
 			}
 	}

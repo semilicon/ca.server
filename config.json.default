@@ -1,0 +1,23 @@
+{
+  "name":"ca.server",
+  "title":"ca.server",
+  "use_forks_for_http":false,
+  "developerMode":true,
+  "developerModeDemonstrateSignature":true,
+  "server":{
+    "https":{
+      "port":"443",
+      "portZone":"public"
+    }
+  },
+  "ca":{
+    "organization":"Semilicon LLC"
+  },
+  "hostCert":{
+    "domain":"semilicon.com",
+    "organization":"Semilicon LLC",
+    "locality":"Moscow",
+    "state":"Moscow",
+    "countryCode":"RU"
+  }
+}

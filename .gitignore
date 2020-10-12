@@ -2,3 +2,10 @@ node_modules
 log/_syslog.log
 package-lock.json
 config.json
+keys.json
+data/.tmp
+data/storage.db
+data/root_ca.crt
+data/root_ca.key
+data/server.crt
+data/server.key

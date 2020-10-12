@@ -1,12 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 const cluster = require('cluster');
 const pathParser = require('path');
-exit=function(){process.exit(0);};//функция завершения работы приложения
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+exit=function(){process.exit(0);};//функция завершения работы форка
+restart=function(){process.send({ cmd: 'restart' });};
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 if(cluster.isWorker&&process.env['role']=='http'){
-	var main=require(__path+'main-http.js');
+	var main=require(__path+'main-web.js');
 	main.start(function(){
-		console.log('Process "main-http" #'+cluster.worker.id+' is sterted.');
+		console.log('Process "main-web" #'+cluster.worker.id+' is sterted.');
 	});
 }else if(cluster.isWorker&&pathParser.extname(process.env['role'])=='.handler'){
 	let name =pathParser.basename(process.env['role'],'.handler');

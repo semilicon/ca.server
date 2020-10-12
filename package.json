@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "ca.server",
   "private": true,
-  "main": "vrz.ui.js",
+  "main": "main.js",
   "dependencies": {
     "mustache": "^4.0.1",
     "qs": "^6.9.4",

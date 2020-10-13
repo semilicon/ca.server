@@ -6,6 +6,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 var lib={
+	genTmpNeme:function(){
+		return crypto.createHash('sha256').update(String(Date.now())).digest('hex');
+	},
 	createRootCA_ifNotExists:function(){
 		if(fs.existsSync(__root+'data/root_ca.key')&&fs.existsSync(__root+'data/root_ca.crt'))return true;
 		execSync('openssl genrsa -out '+__root+'data/root_ca.key 4096');
@@ -18,15 +21,17 @@ var lib={
 		if(daysToExpirate<5)return lib.createNewServerCert();
 	},
 	createNewServerCert:function(){
-		let name=crypto.createHash('sha256').update(String(Date.now())).digest('hex');
-		lib.createCsr(name,config.hostCert);
+		let name=lib.genTmpNeme();
+		lib.createKey(__root+'data/.tmp/'+name+'.key');
+		lib.createCsr(__root+'data/.tmp/'+name+'.key',__root+'data/.tmp/'+name+'.csr',config.hostCert);
 		lib.signCsr(name);
 		fs.renameSync(__root+'data/.tmp/'+name+'.key',__root+'data/server.key');
 		fs.renameSync(__root+'data/.tmp/'+name+'.crt',__root+'data/server.crt');
 	},
 	createNewCert:function(certData){
-		let name=crypto.createHash('sha256').update(String(Date.now())).digest('hex');
-		lib.createCsr(name,certData);
+		let name=lib.genTmpNeme();
+		lib.createKey(__root+'data/.tmp/'+name+'.key');
+		lib.createCsr(__root+'data/.tmp/'+name+'.key',__root+'data/.tmp/'+name+'.csr',certData);
 		lib.signCsr(name);
 		let crtBlock={
 			key: fs.readFileSync(__root+'data/.tmp/'+name+'.key','utf8'),
@@ -37,10 +42,13 @@ var lib={
 		fs.unlinkSync(__root+'data/.tmp/'+name+'.crt');
 		return crtBlock;
 	},
-	createCsr:function(name,certData){
-		execSync('openssl genrsa -out '+__root+'data/.tmp/'+name+'.key 4096');
-		let subj=((certData.domain)?'/CN='+certData.domain+'':'')+((certData.organization)?'/O='+certData.organization+'':'')+((certData.locality)?'/L='+certData.locality+'':'')+((certData.state)?'/S='+certData.state+'':'')+((certData.countryCode)?'/C='+certData.countryCode+'':'');
-		execSync('openssl req -sha256 -new -key '+__root+'data/.tmp/'+name+'.key -out '+__root+'data/.tmp/'+name+'.csr -subj \''+subj+'\'');
+	createKey:function(path){
+		execSync('openssl genrsa -out '+path+' 4096');
+		return true;
+	},
+	createCsr:function(key_path,csr_path,certData){
+		let subj=((certData.domain)?'/CN='+certData.domain+'':'')+((certData.organization)?'/O='+certData.organization+'':'')+((certData.locality)?'/L='+certData.locality+'':'')+((certData.countryCode)?'/C='+certData.countryCode+'':'');
+		execSync('openssl req -sha256 -new -key '+key_path+' -out '+csr_path+' -subj \''+subj+'\'');
 	},
 	signCsr:function(name){
 		if(!fs.existsSync(__root+'data/.tmp/'+name+'.csr'))return false;

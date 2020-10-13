@@ -3,7 +3,7 @@ const openssl=require(__path+'lib/openssl.lib.js');
 var init=function($){
 	if(!$.DATA['csr'])return $.return({success:false,error:400});
 	let csr=$.DATA['csr'];
-	let name=crypto.createHash('sha256').update(String(Date.now())).digest('hex');
+	let name=openssl.genTmpNeme();
 	fs.writeFileSync(__root+'data/.tmp/'+name+'.csr', csr);
 	try{
 		openssl.signCsr(name);
